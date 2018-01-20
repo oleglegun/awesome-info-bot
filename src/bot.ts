@@ -30,3 +30,15 @@ bot.onText(/\/start/, msg => {
         },
     })
 })
+
+bot.onText(/test/, msg => {
+    const chatId = msg.chat.id
+
+    bot.sendMessage(chatId, 'Wanna check ruble rates? Ok.', {
+        reply_markup: {
+            keyboard: [['getRates']],
+            resize_keyboard: true,
+            force_reply: true,
+        },
+    })
+})

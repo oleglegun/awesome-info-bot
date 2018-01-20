@@ -55,7 +55,6 @@ class WebScraper extends Module {
     }
 
     public async render() {
-        // getPage text
         const page = await this.getPage(this.config.url)
 
         const values: MustacheValues = {}
@@ -69,4 +68,74 @@ class WebScraper extends Module {
     }
 }
 
-export { Module, WebScraper }
+/**
+ * Module Interface
+ * new ...module()
+ * .render(): string
+ */
+
+interface Modules {
+    [name: string]: Module
+}
+
+class App {
+    private modules: Modules
+
+    constructor() {
+        this.modules = {}
+    }
+
+    add(module: Module) {
+        this.modules[module.name] = module
+    }
+
+    async run() {
+        const promises = Object.keys(this.modules).map((moduleName, index) => {
+            return this.modules[moduleName].render()
+        })
+
+        const results = await Promise.all(promises)
+
+        return results.join('\n')
+    }
+}
+
+/*
+ *  Client
+ */
+
+class Client {
+    public active: boolean
+    readonly activeModules: string[]
+    public nextRunTime: number
+
+    constructor(public chatId: number) {
+        this.activeModules = []
+        this.chatId = chatId
+    }
+
+    addModule(moduleName: string) {
+        if (this.activeModules.indexOf(moduleName) !== -1) {
+            throw new Error(`attempt to add moduleName that already exists`)
+        }
+        this.activeModules.push(moduleName)
+    }
+}
+
+interface Clients {
+    [chatId: string]: Client
+}
+
+const clients: Clients = {}
+
+// new client comes
+const chatId1 = 1
+
+// add new client
+if (!clients[chatId1]) {
+    const client = new Client(chatId1)
+    client.addModule('test1WebScraper')
+    clients[chatId1] = client
+}
+
+export { Module, WebScraper, App }

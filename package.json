@@ -8,7 +8,7 @@
         "build": "npm run watch-ts",
         "serve": "nodemon dist/bot.js",
         "watch-node": "nodemon dist/server.js",
-        "test": "mocha -w",
+        "test": "mocha -w --reporter min",
         "build-ts": "tsc",
         "watch-ts": "tsc --watch"
     },
