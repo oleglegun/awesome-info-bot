@@ -6,26 +6,28 @@
     "scripts": {
         "start": "npm run serve",
         "build": "npm run watch-ts",
-        "serve": "nodemon dist/server.js",
+        "serve": "nodemon dist/bot.js",
         "watch-node": "nodemon dist/server.js",
-        "watch": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
-        "test": "jest --forceExit --coverage --verbose",
+        "test": "mocha -w",
         "build-ts": "tsc",
-        "watch-ts": "tsc -w",
-        "tslint": "tslint -c tslint.json -p tsconfig.json",
-        "debug": "npm run build && npm run watch-debug",
-        "serve-debug": "nodemon --inspect dist/server.js",
-        "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\""
+        "watch-ts": "tsc --watch"
     },
     "devDependencies": {
-        "@types/node": "^9.3.0",
-        "@types/request": "^2.0.10",
         "@types/config": "^0.0.33",
+        "@types/node": "^9.3.0",
+        "@types/node-fetch": "^1.6.7",
+        "@types/node-telegram-bot-api": "^0.28.2",
+        "@types/request": "^2.0.10",
+        "@types/mustache": "^0.8.30",
         "tslint": "^5.9.1",
-        "typescript": "^2.6.2"
+        "typescript": "^2.6.2",
+        "mocha": "^5.0.0"
     },
     "dependencies": {
         "config": "^1.29.2",
+        "mustache": "^2.3.0",
+        "node-fetch": "^1.7.3",
+        "node-telegram-bot-api": "^0.30.0",
         "request": "^2.83.0"
     }
 }
