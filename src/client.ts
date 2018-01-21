@@ -8,6 +8,8 @@ import {
     ReplyKeyboardRemove,
 } from 'node-telegram-bot-api'
 import { Modules } from './types'
+import log from './logger'
+import * as prettyMs from 'pretty-ms'
 
 class Client {
     public active: boolean
@@ -15,7 +17,7 @@ class Client {
     public nextRunTime: number
     private timer: NodeJS.Timer
     private modules: Modules
-    interval: number
+    private minInterval = 43200000 // 12h
 
     constructor(public chatId: number, modules: Modules) {
         this.activeModules = []
@@ -23,6 +25,22 @@ class Client {
         this.chatId = chatId
     }
 
+    set interval(interval: number) {
+        if (interval < this.minInterval) {
+            log.warn(
+                'Try to set interval < %s for chatId: %d',
+                prettyMs(this.minInterval),
+                this.chatId
+            )
+            this.sendMessage(
+                `Chosen interval is too low. Minimal interval: ${prettyMs(this.minInterval)}.`
+            )
+        } else {
+            this.interval = interval
+        }
+    }
+
+    // start runs the first run and sets interval for looping
     start() {
         console.log('---', 'starting')
         if (this.active) {
@@ -34,7 +52,7 @@ class Client {
             throw new Error('timer is already set')
         }
 
-        // demo run
+        // immediate run
         this.run().then(() => {
             this.sendMessage('Next time:')
         })
@@ -54,7 +72,7 @@ class Client {
 
     // run runs all active modules' render() functions and sends concatenated message the the client
     async run() {
-        console.log('---', 'running')
+        log.info('Running for chatId: %d', this.chatId)
 
         const promises = Object.keys(this.modules).map((moduleName, index) => {
             if (this.activeModules.indexOf(moduleName) === -1) {
@@ -96,11 +114,12 @@ class Client {
         msg: string,
         replyMarkup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply
     ) {
-        if (replyMarkup) {
-            bot.sendMessage(this.chatId, msg, { reply_markup: replyMarkup })
-        } else {
-            bot.sendMessage(this.chatId, msg)
-        }
+        log.info(msg)
+        // if (replyMarkup) {
+        //     bot.sendMessage(this.chatId, msg, { reply_markup: replyMarkup })
+        // } else {
+        //     bot.sendMessage(this.chatId, msg)
+        // }
     }
 }
 

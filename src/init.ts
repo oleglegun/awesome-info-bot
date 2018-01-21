@@ -2,6 +2,7 @@ import { App } from './app'
 import { Client } from './client'
 import WebScraper from './modules/webscraper'
 import { setTimeout } from 'timers'
+import log from './logger'
 
 interface Clients {
     [chatId: string]: Client
@@ -35,7 +36,7 @@ const ws2 = new WebScraper('test2', {
 app.add(ws1)
 app.add(ws2)
 
-console.log('---', app.modules)
+// console.log('---', app.modules)
 
 /**
  * Add client
@@ -52,20 +53,20 @@ if (!clients[chatId1]) {
     clients[chatId1] = client
 }
 
-console.log('---', clients)
+// console.log('---', clients)
 
 // add modules
 clients[chatId1].addModule('test1WebScraper')
 
-console.log('---', clients)
+// console.log('---', clients)
 
 // set interval 1sec
 clients[chatId1].interval = 1000
 
 // if /start
-clients[chatId1].start()
+// clients[chatId1].start()
 
 // if /stop
 setTimeout(() => {
-    clients[chatId1].stop()
+    // clients[chatId1].stop()
 }, 5000)
