@@ -1,5 +1,7 @@
-const { WebScraper, App } = require('../dist/app')
+const { App } = require('../dist/app')
+const WebScraper = require('../dist/modules/webscraper')
 const assert = require('assert')
+require('../dist/init')
 
 describe('Module tests', () => {
     let ws1

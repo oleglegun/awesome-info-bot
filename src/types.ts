@@ -1,3 +1,5 @@
+import Module from './modules/base'
+
 type ApiResponse = {
     base: string
     data: string
@@ -8,4 +10,8 @@ type Rates = {
     [propName: string]: number
 }
 
-export {ApiResponse, Rates}
+interface Modules {
+    [name: string]: Module
+}
+
+export { ApiResponse, Rates, Modules }

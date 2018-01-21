@@ -42,3 +42,5 @@ bot.onText(/test/, msg => {
         },
     })
 })
+
+export { bot }
